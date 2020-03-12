@@ -1,35 +1,56 @@
+#
+# 이미지 출처 : https://github.com/tiangolo/uwsgi-nginx-docker
+#
 FROM tiangolo/uwsgi-nginx:python3.7-alpine3.8
 
-LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
+# 작성 및 유지 보수.
+# LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
+#
+LABEL maintainer="Gordon Ahn <tuxxon@nate.com>"
 
+#
+# Flask 설치
+#
 RUN pip install flask
 
-# URL under which static (not modified by Python) files will be requested
-# They will be served by Nginx directly, without being handled by uWSGI
+#
+# 환경변수 설정
+# nginx 정적 웹문서 경로 그리고 절대경로
+#
 ENV STATIC_URL /static
-# Absolute path in where the static files wil be
 ENV STATIC_PATH /app/static
 
-# If STATIC_INDEX is 1, serve / with /static/index.html directly (or the static URL configured)
-# ENV STATIC_INDEX 1
+#
+# STATIC_INDEX is 1 이면 index.html을 지정함
+#
 ENV STATIC_INDEX 0
 
-# Add demo app
+#
+# 서버용 앱 위치 지정함
+#
 COPY ./app /app
 WORKDIR /app
 
-# Make /app/* available to be imported by Python globally to better support several use cases like Alembic migrations.
+
+#
+# /app을 Python에서 사용가능하도록
+#
 ENV PYTHONPATH=/app
 
-# Move the base entrypoint to reuse it
+# 
+# 콘테이너 내에서 실행가능하게 설치하는 중. 
+#
 RUN mv /entrypoint.sh /uwsgi-nginx-entrypoint.sh
-# Copy the entrypoint that will generate Nginx additional configs
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+#
+# 시작시, 반드시 실행.
+#
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Run the start script provided by the parent image tiangolo/uwsgi-nginx.
-# It will check for an /app/prestart.sh script (e.g. for migrations)
-# And then will start Supervisor, which in turn will start Nginx and uWSGI
+#
+# docker run 수행시 매개변수 받을 수 있음
+# 서버 실행가능
+#
 CMD ["/start.sh"]
