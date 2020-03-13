@@ -10,7 +10,7 @@ docker build -t smishing:latest .
 
 #### To run DockerImage
 ```
-docker run -d --name smishing -p 8080:80 smishing
+docker run -it -p 8080:80 smishing
 ```
 
 
