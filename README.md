@@ -4,7 +4,7 @@
 
 #### To build Dockerfile
 ```
-docker build -t smishing .
+docker build -t smishing:latest .
 ```
 
 
