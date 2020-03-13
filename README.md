@@ -10,7 +10,7 @@ docker build -t smishing .
 
 #### To run
 ```
-docker run -d --name mycontainer -p 80:8080 smishing
+docker run -d --name mycontainer -p 8080:80 smishing
 ```
 
 
