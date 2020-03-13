@@ -2,15 +2,15 @@
 
 강의를 위한 스미싱을 차단하기 위해한 서버 및 안드로이드 앱 개발.
 
-#### To build
+#### To build Dockerfile
 ```
 docker build -t smishing .
 ```
 
 
-#### To run
+#### To run DockerImage
 ```
-docker run -d --name mycontainer -p 8080:80 smishing
+docker run -d --name smishing -p 8080:80 smishing
 ```
 
 
