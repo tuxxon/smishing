@@ -14,13 +14,15 @@ docker run -d --name mycontainer -p 80:8080 smishing
 ```
 
 
-### Build & run docker-compose
+#### Build & run docker-compose
 ```
 docker-compose up -d 
 ```
 or
+
+#### To rebuild and rerun.
 ```
-docker-compose up -d --build   # for rebuild and running.
+docker-compose up -d --build   
 ```
 
 
