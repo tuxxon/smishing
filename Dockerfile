@@ -11,7 +11,7 @@ LABEL maintainer="Gordon Ahn <tuxxon@nate.com>"
 #
 # Flask 설치
 #
-RUN pip install flask
+RUN pip install flask pymysql
 
 #
 # 환경변수 설정
