@@ -14,6 +14,10 @@ class Database():
             )
         self.cursor= self.db.cursor(pymysql.cursors.DictCursor)
  
+    def __del__(self):
+        self.db.close()
+        self.cursor.close()
+
     def execute(self, query, args={}):
         self.cursor.execute(query, args) 
  

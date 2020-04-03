@@ -1,70 +1,113 @@
-import sys
+import json
+import logging
+import requests
+import time
+import urllib
 
-from database import Database
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask import url_for
 from flask import Flask
+from usertable import UserTable
 
 app = Flask(__name__)
 
-# private SELECT query
-def _select():
-    db = Database()
-
-    sql = "SELECT id, test \
-           FROM smishing.testTable"
-    row = db.executeAll(sql)
-
-    return row
-
 # INSERT 함수 예제
-@app.route('/insert', methods=['GET'])
-def insert():
-    db = Database()
- 
-    sql = "INSERT INTO smishing.testTable(test) \
-           VALUES('%s')"% ('testData')
-    db.execute(sql)
-    db.commit()
+@app.route('/user', methods=['POST'])
+def add_user():
 
-    return "inserted=>{}".format(_select())
+    j = request.get_json()
 
-# SELECT 함수 출력
-@app.route('/select', methods=['GET'])
-def select():
-    return "selected=>{}".format(_select())
+    print("DEBUG> input ===>{}".format(j))
 
-# UPDATE 함수 예제
-@app.route('/update', methods=['GET'])
-def update():
-    db = Database()
+    db = UserTable()
+    result = db.insert(j)
+    result = {"message":"ok"} if result is None else result
 
-    sql = "UPDATE smishing.testTable \
-           SET test='%s' \
-           WHERE test='testData'"% ('update_Data')
-    db.execute(sql)
-    db.commit()
-
-    return "updated => {}".format(_select())
-
-# DELETE 함수 예제
-@app.route('/delete', methods=['GET'])
-def delete():
-    db = Database()
-
-    sql = "DELETE FROM smishing.testTable \
-           WHERE test='update_Data'"
-
-    db.execute(sql)
-    db.commit()
-
-    return "updated => {}".format(_select())
-
-@app.route("/")
-def hello():
-    version = "{}.{}".format(sys.version_info.major, sys.version_info.minor)
-    message = "Hello World from Flask in a uWSGI Nginx Docker container with Python {} on Alpine (default)".format(
-        version
+    response = app.response_class(
+        response=json.dumps(result),
+        status=200,
+        mimetype='application/json'
     )
-    return message
+
+    return response
+
+
+# LIST 예제
+@app.route('/users', methods=['GET'])
+def list_users():
+
+    page = int(request.args.get('page', "0"))
+    np = int(request.args.get('itemsInPage', "20"))
+
+    db = UserTable()
+    res = db.list(page=page, itemsInPage=np)
+
+    result = {
+        "users" : "{}".format(res),
+        "count" : len(res),
+        "page"  : page
+    }
+
+    return result
+
+
+# Manage a user from users by ID 예제
+@app.route('/user/<id>', methods=['GET','PUT','DELETE'])
+def manage_user(id):
+    if request.method == 'GET':
+        result = get_user(id)
+    elif request.method == 'PUT':
+        result = update_user(id)
+    elif request.method == 'DELETE':
+        result = delete_user(id)
+    else:
+        result = {
+            "error" : "http method not found = {}".format(request.method)
+        }
+
+    return result;
+
+
+# Get a user from users by ID 예제
+def get_user(id):
+
+    db = UserTable()
+    result = db.get(id)
+
+    return json.dumps(result)
+
+
+def update_user(id):
+
+    j = request.get_json()
+    db = UserTable()
+    result = db.update(id,j)
+    result = {"message":"ok"} if result is None else result
+
+    response = app.response_class(
+        response=json.dumps(result),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
+
+
+def delete_user(id):
+
+    db = UserTable()
+    result = db.delete(id)
+    result = {"message":"ok"} if result is None else result
+
+    response = app.response_class(
+        response=json.dumps(result),
+        status=200,
+        mimetype='application/json'
+    )
+
+    return response
 
 
 if __name__ == "__main__":
