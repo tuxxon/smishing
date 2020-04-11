@@ -11,7 +11,7 @@ LABEL maintainer="Gordon Ahn <tuxxon@nate.com>"
 #
 # Flask 설치
 #
-RUN pip install flask pymysql requests
+RUN pip install flask pymysql requests flask_restplus Werkzeug==0.16.1
 
 #
 # 환경변수 설정
