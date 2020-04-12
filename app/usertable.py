@@ -43,10 +43,10 @@ class UserTable(Database):
 
         sql = "INSERT INTO users(useremail,username,userphone,userdesc) "
         sql = sql + "values('{useremail}','{username}','{userphone}','{userdesc}')".format(
-            useremail = utils.addslashes( json.dumps(j.get("useremail",""))),
-            username = utils.addslashes( json.dumps(j.get("username",""))),
-            userphone = utils.addslashes( json.dumps(j.get("userphone",""))),
-            userdesc = utils.addslashes( json.dumps(j.get("userdesc","")))
+            useremail = utils.addslashes( j.get("useremail","")),
+            username = utils.addslashes( j.get("username","")),
+            userphone = utils.addslashes( j.get("userphone","")),
+            userdesc = utils.addslashes( j.get("userdesc",""))
             )
 
         print("DEBUG SQL ===>{}".format(sql))
@@ -80,7 +80,8 @@ class UserTable(Database):
         sql += " views = views "
         sql += " WHERE id = {} ".format(id)
 
-        print("DEBUG SQL ===>{}".format(sql))
+        print("DEBUG SQL ===>{}".format(sql))        
+
 
         result = None
         try:
