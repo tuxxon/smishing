@@ -1,5 +1,6 @@
 
 from database import Database
+import bcrypt
 import json
 import utils
 
@@ -38,11 +39,37 @@ class UserTable(Database):
 
         return result
 
+    def hashPasswd(self, passwd):
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(passwd.encode('utf-8'), salt)
+        return hashed.decode('utf-8',"ignore")
+
+
+    def auth(self, email, passwd):
+
+        sql =  "SELECT id, userpass "
+        sql += "FROM users "
+        sql += "WHERE useremail='{}';".format(email)
+
+        print("DEBUG SQL ===>{}".format(sql))
+
+        result = False
+        try:
+            onerow = self.executeOne(sql)
+            print("[DEBUG] row = {}".format(onerow))
+            if bcrypt.checkpw(passwd.encode('utf-8'), onerow.get('userpass').encode('utf-8')):
+                result = True
+        except Exception as e:
+            return {"error" : "{}".format(e)}
+
+        return result
+
 
     def insert(self, j):
 
         sql = "INSERT INTO users(useremail,username,userphone,userdesc) "
         sql = sql + "values('{useremail}','{username}','{userphone}','{userdesc}')".format(
+            userpass = self.hashPasswd( j.get("userpass","") ),            
             useremail = utils.addslashes( j.get("useremail","")),
             username = utils.addslashes( j.get("username","")),
             userphone = utils.addslashes( j.get("userphone","")),

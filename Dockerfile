@@ -1,7 +1,7 @@
 #
 # 이미지 출처 : https://github.com/tiangolo/uwsgi-nginx-docker
 #
-FROM tiangolo/uwsgi-nginx:python3.7-alpine3.8
+FROM tiangolo/uwsgi-nginx:python3.6-alpine3.7
 
 # 작성 및 유지 보수.
 # LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
@@ -11,7 +11,9 @@ LABEL maintainer="Gordon Ahn <tuxxon@nate.com>"
 #
 # Flask 설치
 #
-RUN pip install flask pymysql requests flask_restplus Werkzeug==0.16.1
+RUN apk add libffi-dev openssl-dev build-base
+RUN pip install flask pymysql requests flask_restplus Flask-Bcrypt cffi cryptography Werkzeug==0.16.1 flask_jwt_extended
+
 
 #
 # 환경변수 설정
