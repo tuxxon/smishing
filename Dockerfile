@@ -12,7 +12,7 @@ LABEL maintainer="Gordon Ahn <tuxxon@nate.com>"
 # Flask 설치
 #
 RUN apk add libffi-dev openssl-dev build-base
-RUN pip install flask pymysql requests flask_restplus Flask-Bcrypt cffi cryptography Werkzeug==0.16.1 flask_jwt_extended
+RUN pip install flask pymysql requests flask_restplus Flask-Bcrypt cffi cryptography Werkzeug==0.16.1 flask_jwt_extended redis
 
 
 #

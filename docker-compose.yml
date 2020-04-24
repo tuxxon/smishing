@@ -7,10 +7,14 @@ services:
     ports:
       - "8080:80"
     environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - FLASK_DB=db
       - FLASK_APP=app/main.py
       - FLASK_DEBUG=1
       - 'RUN=flask run --host=0.0.0.0 --port=80'
+  redis:
+    image: redis:alpine
   db:
     image: mysql:5.7
     restart: always

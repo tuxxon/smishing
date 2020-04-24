@@ -8,6 +8,8 @@ from flask_jwt_extended import (
 )
 
 from usertable import UserTable
+from user_cache import UserCache
+import ast
 
 api = Namespace('User', description='Apis for users')
 
@@ -123,8 +125,16 @@ def list_users():
 # Get a user from users by ID 예제
 def get_user(id):
 
-    db = UserTable()
-    result = db.get(id)
+    cache = UserCache()
+    result = cache.get_user(id)
+
+    if result is not None:
+        result = ast.literal_eval(result.decode('utf-8','ignore'))
+    else:
+        db = UserTable()
+        result = db.get(id)
+        cache.set_user(id, str(result))
+
     result['token'] = get_raw_jwt()
     return result
 
