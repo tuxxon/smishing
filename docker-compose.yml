@@ -7,8 +7,8 @@ services:
     ports:
       - "8080:80"
     environment:
-      - AWS_ACCESS_KEY_ID=AKIAIIAZ3UNEVINDH2JQ
-      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_ACCESS_KEY_ID=<<-------------------->>
+      - AWS_SECRET_ACCESS_KEY=R<<------------------------------------->>
       - AWS_REGION=ap-northeast-2
       - REDIS_HOST=redis
       - REDIS_PORT=6379
