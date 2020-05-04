@@ -12,6 +12,8 @@ app.register_blueprint(api)
 #
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_CSRF_CHECK_FORM'] = True
+
 jwt = JWTManager(app)
 
 

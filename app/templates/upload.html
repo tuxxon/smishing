@@ -1,0 +1,9 @@
+<html>
+    <body>
+        <form action="/api/v1/upload/{{userId}}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="imageFile" />
+            <input id="csrf_token" name="csrf_token" type="hidden" value="{{csrf_token}}" />
+            <input type="submit"/>
+        </form>
+    </body>
+</html>
